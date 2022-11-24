@@ -1,6 +1,9 @@
 open Sedlexing
 
-type token_kind =
+type token = { span : source_span; kind : token_kind }
+and source_span = { start : Lexing.position; finish : Lexing.position }
+
+and token_kind =
   | TKLetKw
   | TKInKw
   | TKFunKw
@@ -16,11 +19,6 @@ type token_kind =
   | TKDiv
   | TKEof
   | TKError
-
-type source_span = { start : Lexing.position; finish : Lexing.position }
-type token = { span : source_span; kind : token_kind }
-
-let new_token (start, finish) kind = { span = { start; finish }; kind }
 
 let rec string_of_token { span; kind } =
   string_of_token_kind kind ^ string_of_source_span span
@@ -83,6 +81,8 @@ and some_token kind eof lexbuf =
   let start, finish = lexing_positions lexbuf in
   let tok = { span = { start; finish }; kind } in
   Some (tok, (eof, lexbuf))
+
+and new_token (start, finish) kind = { span = { start; finish }; kind }
 
 let lex source =
   let lexbuf = Utf8.from_string source in
