@@ -1,6 +1,6 @@
 (executable
  (public_name lc_interpreter)
  (name main)
- (libraries lc_interpreter sedlex)
+ (libraries lc_interpreter sedlex batteries)
  (preprocess
   (pps ppx_deriving.show sedlex.ppx)))

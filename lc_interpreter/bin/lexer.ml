@@ -1,3 +1,4 @@
+open Batteries
 open Sedlexing
 
 type token = { span : source_span; kind : token_kind }
@@ -57,30 +58,33 @@ let rec next_token (eof, lexbuf) =
   let number = [%sedlex.regexp? Plus '0' .. '9'] in
   let alpha = [%sedlex.regexp? 'A' .. 'Z' | 'a' .. 'z'] in
   let alphanum = [%sedlex.regexp? alpha | digit] in
+  let some_token kind =
+    let span = lexing_positions lexbuf in
+    Some (new_token span kind, (eof, lexbuf))
+  in
   match%sedlex lexbuf with
   | white_space -> next_token (eof, lexbuf)
-  | "let" -> some_token TKLetKw eof lexbuf
-  | "in" -> some_token TKInKw eof lexbuf
-  | "fun" -> some_token TKFunKw eof lexbuf
-  | number -> some_token TKIntLit eof lexbuf
-  | alpha, Star (alphanum | '_') -> some_token TKIdent eof lexbuf
-  | "=>" -> some_token TKFatArrow eof lexbuf
-  | '=' -> some_token TKEquals eof lexbuf
-  | '(' -> some_token TKLParen eof lexbuf
-  | ')' -> some_token TKRParen eof lexbuf
-  | '+' -> some_token TKAdd eof lexbuf
-  | '-' -> some_token TKSub eof lexbuf
-  | '*' -> some_token TKMul eof lexbuf
-  | '/' -> some_token TKDiv eof lexbuf
-  | eof -> if eof then None else some_token TKEof true lexbuf
+  | "let" -> some_token TKLetKw
+  | "in" -> some_token TKInKw
+  | "fun" -> some_token TKFunKw
+  | number -> some_token TKIntLit
+  | alpha, Star (alphanum | '_') -> some_token TKIdent
+  | "=>" -> some_token TKFatArrow
+  | '=' -> some_token TKEquals
+  | '(' -> some_token TKLParen
+  | ')' -> some_token TKRParen
+  | '+' -> some_token TKAdd
+  | '-' -> some_token TKSub
+  | '*' -> some_token TKMul
+  | '/' -> some_token TKDiv
+  | eof ->
+      if eof then None
+      else
+        let span = lexing_positions lexbuf in
+        Some (new_token span TKEof, (true, lexbuf))
   | _ ->
       let tok = new_token (lexing_positions lexbuf) TKError in
       Some (tok, (eof, lexbuf))
-
-and some_token kind eof lexbuf =
-  let start, finish = lexing_positions lexbuf in
-  let tok = { span = { start; finish }; kind } in
-  Some (tok, (eof, lexbuf))
 
 and new_token (start, finish) kind = { span = { start; finish }; kind }
 
