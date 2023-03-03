@@ -4,8 +4,8 @@ open Lexer
 let () =
   let rec f () =
     let test = read_line () in
-    let tokens = lex test in
+    let tokens = enum_of_string test in
     Printf.printf "Source: \"%s\"\nTokens:\n" test;
-    Seq.map string_of_token tokens |> Seq.iter print_endline;
+    Enum.map Token.to_string tokens |> Enum.iter print_endline;
     f ()
   in f ()
