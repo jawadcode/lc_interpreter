@@ -1,11 +1,26 @@
-module Token : sig
-  type t = { span : Utilities.Span.t; kind : token_kind }
+open Utilities
 
-  and token_kind
+module Token : sig
+  type t = { span : Span.t; kind : token_kind }
+
+  and token_kind =
+    | TKLetKw
+    | TKInKw
+    | TKFunKw
+    | TKIntLit
+    | TKIdent
+    | TKFatArrow
+    | TKEquals
+    | TKLParen
+    | TKRParen
+    | TKAdd
+    | TKSub
+    | TKMul
+    | TKDiv
+    | TKEof
+    | TKError
 
   val to_string : t -> string
 end
 
-type lexer
-
-val enum_of_string : string -> Token.t BatEnum.t
+val string_to_tokens : string -> Token.t BatEnum.t

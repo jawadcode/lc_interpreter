@@ -45,6 +45,7 @@ module Token = struct
 end
 
 [@@@ocaml.warning "-69"]
+
 type lexer = {
   source : string;
   mutable start : int;
@@ -52,15 +53,11 @@ type lexer = {
   mutable eof : bool;
 }
 
-let rec enum_of_string source =
+open Token
+
+let rec string_to_tokens source =
   let lexer = { source; start = 0; current = 0; eof = false } in
   Enum.from_while (next_token lexer)
 
-and next_token lexer _ =
-  if lexer.eof then None
-  else
-    let kind = next_kind lexer in
-    if kind = Token.TKEof then lexer.eof <- true;
-    Some { Token.span = { start = lexer.start; finish = lexer.current }; kind }
-
-and next_kind _lexer = TKEof
+and next_token _lexer _ =
+  Some { span = { Span.start = 0; Span.finish = 0 }; kind = TKEof }
