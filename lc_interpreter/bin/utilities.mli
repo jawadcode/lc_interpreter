@@ -1,7 +1,15 @@
 module Span : sig
   type t = { start : int; finish : int }
+  and 'a spanned = { span : t; node : 'a }
 
+  val ( + ) : t -> t -> t
+  val map : ('a -> 'b) -> 'a spanned -> 'b spanned
   val from_positions : Lexing.position -> Lexing.position -> t
-  val sub : string -> t -> string
+  val source : string -> t -> string
   val to_string : t -> string
+end
+
+module Ops : sig
+  val ( let+ ) : 'a option -> ('a -> 'b) -> 'b option
+  val ( let* ) : 'a option -> ('a -> 'b option) -> 'b option
 end

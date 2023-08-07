@@ -2,3 +2,8 @@
  (public_name lc_interpreter)
  (name main)
  (libraries lc_interpreter batteries))
+
+ (env
+  (dev
+   (flags
+    (:standard -warn-error -A))))

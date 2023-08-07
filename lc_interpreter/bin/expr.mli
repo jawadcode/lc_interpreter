@@ -8,8 +8,8 @@ type expr' =
   | EBinOp of { op : bin_op Span.spanned; lhs : expr }
   | EApp of { func : expr; arg : expr }
 
-and expr = expr' Span.spanned
-and ident = string Span.spanned
+and expr
+and ident
 and bin_op = Add | Sub | Mul | Div | Mod
 
-let expr_to_string _expr = failwith "unimplemented"
+val expr_to_string : expr -> string

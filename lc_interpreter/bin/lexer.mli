@@ -1,7 +1,7 @@
 open Utilities
 
 module Token : sig
-  type t = { span : Span.t; kind : token_kind }
+  type t = token_kind Span.spanned
 
   and token_kind =
     | TKLetKw
@@ -10,13 +10,14 @@ module Token : sig
     | TKIntLit
     | TKIdent
     | TKFatArrow
-    | TKEquals
+    | TKBind
     | TKLParen
     | TKRParen
     | TKAdd
     | TKSub
     | TKMul
     | TKDiv
+    | TKMod
     | TKEof
     | TKError
 
