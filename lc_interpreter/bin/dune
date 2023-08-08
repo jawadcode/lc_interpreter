@@ -3,7 +3,7 @@
  (name main)
  (libraries lc_interpreter batteries))
 
- (env
-  (dev
-   (flags
-    (:standard -warn-error -A))))
+(env
+ (dev
+  (flags
+   (:standard -warn-error -A))))

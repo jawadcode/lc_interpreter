@@ -1,14 +1,13 @@
 open Batteries
-open Lexer
-open Expr
+open Parser
+
+let rec main () =
+  (try read_line () with End_of_file -> exit 1)
+  |> Parser.run Parser.expr_parser
+  |> Result.map (print_endline % Expr.expr_to_string)
+  |> Result.iter_error (print_any stderr % Parser.error_to_string);
+  main ()
 
 let () =
   Printexc.record_backtrace true;
-  let rec go () =
-    let test = try read_line () with End_of_file -> exit 1 in
-    let tokens = string_to_tokens test in
-    Printf.printf "Source: %s\nTokens:\n" (dump test);
-    Enum.map Token.to_string tokens |> Enum.iter print_endline;
-    go ()
-  in
-  go ()
+  main ()

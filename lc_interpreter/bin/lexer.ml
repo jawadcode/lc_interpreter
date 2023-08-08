@@ -56,7 +56,7 @@ open Ops
 
 let rec string_to_tokens source =
   let lexer = { source; start = 0; current = 0; eof = false } in
-  Enum.from_while (next_token lexer)
+  Enum.from_while @@ next_token lexer
 
 and next_token lexer _ =
   let _ = skip_whitespace lexer in
@@ -120,7 +120,7 @@ and check_kw lexer start rest kind =
   else TKIdent
 
 and str_eq src src_start rest =
-  String.length rest |> String.sub src src_start = rest
+  String.sub src src_start @@ String.length rest = rest
 
 and is_ident ch = Char.is_letter ch || ch = '_'
 
