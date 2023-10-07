@@ -7,6 +7,7 @@ module Span : sig
   val from_positions : Lexing.position -> Lexing.position -> t
   val source : string -> t -> string
   val to_string : t -> string
+  val fmt : ('a -> string) -> 'a spanned -> string
 end
 
 module Ops : sig

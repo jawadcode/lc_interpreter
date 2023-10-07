@@ -15,6 +15,8 @@ module Span = struct
 
   let to_string { start; finish } =
     string_of_int start ^ ".." ^ string_of_int finish
+
+  let fmt f { span; node } = Printf.sprintf "%s @ %s" (f node) (to_string span)
 end
 
 module Ops = struct
