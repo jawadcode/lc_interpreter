@@ -73,5 +73,6 @@ module Parser = struct
 
   type 'res t = { run : input -> input * ('res, error) result }
 
+  let expr_parser = undefined "unimplemented"
   let run p str = string_to_tokens str |> p.run |> Tuple2.second
 end

@@ -25,6 +25,6 @@ module Parser : sig
 
   type 'res t = { run : input -> input * ('res, error) result }
 
-  (* val expr_parser : Expr.t t *)
+  val expr_parser : Expr.t t
   val run : 'a t -> string -> ('a, error) result
 end
