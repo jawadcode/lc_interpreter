@@ -19,7 +19,10 @@ end
 
 module Parser : sig
   type input = Token.t BatEnum.t
-  type error = UnexpectedToken of Token.token_kind * Span.t
+
+  type error =
+    | UnexpectedToken of { got : Token.t; expected : string }
+    | UnexpectedEndOfInput
 
   val error_to_string : error -> string
 

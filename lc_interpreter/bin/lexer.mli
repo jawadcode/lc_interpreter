@@ -22,6 +22,7 @@ module Token : sig
     | TKError
 
   val to_string : t -> string
+  val token_kind_to_string : token_kind -> string
 end
 
 val string_to_tokens : string -> Token.t BatEnum.t

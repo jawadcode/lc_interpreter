@@ -23,25 +23,25 @@ module Token = struct
     | TKError
 
   let rec to_string (tok : t) =
-    string_of_token_kind tok.node ^ " @ " ^ Span.to_string tok.span
+    token_kind_to_string tok.node ^ " @ " ^ Span.to_string tok.span
 
-  and string_of_token_kind = function
-    | TKLetKw -> "LetKw"
-    | TKInKw -> "InKw"
-    | TKFunKw -> "FunKw"
-    | TKIntLit -> "IntLit"
-    | TKIdent -> "Ident"
-    | TKFatArrow -> "FatArrow"
-    | TKBind -> "Bind"
-    | TKLParen -> "LParen"
-    | TKRParen -> "RParen"
-    | TKAdd -> "Add"
-    | TKSub -> "Sub"
-    | TKMul -> "Mul"
-    | TKDiv -> "Div"
-    | TKMod -> "Mod"
-    | TKEof -> "Eof"
-    | TKError -> "Error"
+  and token_kind_to_string = function
+    | TKLetKw -> "'let'"
+    | TKInKw -> "'in'"
+    | TKFunKw -> "'fun'"
+    | TKIntLit -> "integer literal"
+    | TKIdent -> "identifier"
+    | TKFatArrow -> "'=>'"
+    | TKBind -> "'='"
+    | TKLParen -> "'('"
+    | TKRParen -> "')'"
+    | TKAdd -> "'+'"
+    | TKSub -> "'-'"
+    | TKMul -> "'*'"
+    | TKDiv -> "'/'"
+    | TKMod -> "'%'"
+    | TKEof -> "EOF"
+    | TKError -> "<invalid token>"
 end
 
 type lexer = {
@@ -70,7 +70,12 @@ and next_token lexer _ =
         Some TKEof
   in
   let span = lexer_span lexer in
-  { Span.span; node }
+  {
+    Span.span;
+    source =
+      Substring.substring lexer.source span.start (span.finish - span.start);
+    node;
+  }
 
 and lexer_span lexer = { Span.start = lexer.start; Span.finish = lexer.current }
 
