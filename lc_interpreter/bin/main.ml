@@ -1,10 +1,11 @@
 open Batteries
-open Parser
+open Lexer
 
 let run source =
-  Parser.run Parser.expr_parser source
-  |> Result.map (print_endline % Expr.expr_to_string)
-  |> Result.iter_error (prerr_endline % Parser.error_to_string)
+  Parser_combis.run Lexer.string_to_tokens Parser.expr_parser source
+  |> Result.map (print_endline % Parser.expr_to_string)
+  |> Result.iter_error
+       (prerr_endline % Parser_combis.error_to_string Token.token_kind_to_string)
 
 let rec main () =
   print_string "$ ";
@@ -30,8 +31,8 @@ let () =
   Printexc.record_backtrace true;
   main ()
 
-(* Source String: "let id = fun x => x in id 123" *)
-(* let test =
+(* let test = "let id = fun x => x in id 123" in
+let expected =
      {
        Span.span = { start = 0; finish = 29 };
        node =
@@ -84,4 +85,4 @@ let () =
            };
      }
    in
-   print_string (expr_to_string test) *)
+   print_bool () *)
